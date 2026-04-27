@@ -347,7 +347,7 @@ export default function SunoAssistant() {
     ].filter(Boolean).join("\n");
 
     try {
-      const response = await fetch("https://api.anthropic.com/v1/messages", {
+      const response = await fetch("/api/claude", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -378,7 +378,7 @@ export default function SunoAssistant() {
     if (!fixRequest.trim()) return;
     setFixing(true);
     try {
-      const response = await fetch("https://api.anthropic.com/v1/messages", {
+      const response = await fetch("/api/claude", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -412,7 +412,7 @@ export default function SunoAssistant() {
         `Language: ${lang === "RU" ? "Russian" : "English"} (do NOT include this in style string)`,
       ].filter(Boolean).join("\n");
 
-      const response = await fetch("https://api.anthropic.com/v1/messages", {
+      const response = await fetch("/api/claude", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -442,7 +442,7 @@ export default function SunoAssistant() {
     setStyleString("");
     try {
       const langInstruction = lang === "RU" ? "Write lyrics in Russian only." : "Write lyrics in English only.";
-      const response = await fetch("https://api.anthropic.com/v1/messages", {
+      const response = await fetch("/api/claude", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -477,7 +477,7 @@ export default function SunoAssistant() {
     if (voices.length === 0) return;
     setUpdatingVocal(true);
     try {
-      const response = await fetch("https://api.anthropic.com/v1/messages", {
+      const response = await fetch("/api/claude", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
