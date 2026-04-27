@@ -88,31 +88,80 @@ OUTPUT FORMAT (strict JSON, no markdown):
   "lyrics": "Full lyrics — see rules below"
 }
 
-═══ CRAFT RULES (non-negotiable) ═══
+═══ RHYME DICTIONARIES (use ONLY these — never invent rhymes) ═══
 
-RHYME QUALITY:
-- Minimum rhyme density: every 2nd line must rhyme (AABB or ABAB)
-- FORBIDDEN Russian clichés: любовь–кровь, ночь–дочь, друг–вдруг, огонь–горизонт
-- FORBIDDEN English clichés: love–above, heart–start, home–alone
-- No more than 1 verb-verb rhyme per verse (иду–найду–пройду = forbidden)
-- Last 2-3 sounds must match exactly — not approximate rhymes
+RUSSIAN — FORBIDDEN clichés: любовь–кровь | ночь–дочь | друг–вдруг | огонь–горизонт | волна–волна
 
-HOOK (крючок):
-- One KEY PHRASE — 3-6 words, emotionally charged
-- Repeat it minimum 3 times across different sections
-- First Chorus line ≤ 8 syllables — short, punchy, memorable
-- Hook must be hinted in Intro before fully appearing in Chorus
+RUSSIAN QUALITY RHYMES:
+- огонь: миллион, сезон, закон, патрон, телефон, туман, обман, план, титан
+- звезда: всегда, вода, сюда, тогда, навсегда, страна, война, тишина, цена
+- мечта: красота, суета, темнота, пустота, чистота, высота
+- сон: закон, телефон, поклон, район, сезон, вагон, балкон
+- тень: день, лень, сирень, олень, ступень
+- свет: ответ, портрет, привет, билет, поэт, расцвет, предмет
+- мир: эфир, командир, кумир, сувенир, ампир
+- жизнь: держись, борись, явись, откройся
+- вера: сфера, атмосфера, карьера, вечера
+- свобода: природа, погода, народа, похода, года
+- волна: весна, луна, стена, она, страна, тишина
+- земля: семья, моя, друзья, края, судья
+- сердце: солнце, конец, отец, наконец, певец, венец
+- дом: кругом, хором, объёмом, знакомо
+- глаз: сейчас, враз, приказ, показ, рассказ
 
-SYLLABLE COUNT (count carefully before outputting):
-- Russian Pop/R&B/Indie: 9–11 syllables per line
-- Russian Ballad/Folk: 7–9 syllables per line
-- English Pop: 8–10 syllables per line
-- Strong beat falls on syllable 1 of each line
+ENGLISH — FORBIDDEN: love–above | heart–start | home–alone
 
-VERSE vs CHORUS contrast:
-- Verse: conversational, narrow intervals, storytelling, specific imagery
-- Chorus: soaring, open vowels (А, О, Э), universal emotion, wide intervals
-- Bridge: contrast in rhythm or perspective, 3 lines only
+ENGLISH QUALITY RHYMES:
+- night: light, right, bright, fight, flight, height, sight, midnight, twilight
+- fire: higher, wire, admire, desire, inspire, require, entire
+- dream: seem, team, scream, stream, gleam, beam, esteem, redeem
+- time: rhyme, climb, prime, chime, sublime, lifetime
+- sky: high, fly, try, cry, deny, reply, goodbye
+- pain: rain, gain, chain, brain, train, insane, explain, remain
+- song: long, wrong, strong, belong, prolong, lifelong
+- star: are, far, scar, guitar, avatar, superstar
+- moon: soon, tune, balloon, monsoon, afternoon
+
+═══ HIT FORMULA ═══
+
+- Song length: 3:24 optimal (streaming algorithm)
+- Intro: max 10 seconds (skip-rate optimization)
+- Chorus: must appear before 0:50 mark
+- Hook: 3-note earworm — simple + singable + familiar-but-new
+- Max 3-4 unique melodies — repeat them, don't introduce new ones
+
+WRITING TECHNIQUES:
+1. Open vowels А О Э on strong beats (not Ы Й)
+2. Alliteration in chorus: «Ты мой кайф, ты мой старт» (к-к-к)
+3. Internal rhymes: «Мой рай — твой взгляд»
+4. Dynamic phrase pattern: long–short–long OR short–long–short
+5. Bounce words with stress on beat 1: кайф, рай, бой, старт, бам
+
+TIMBRAL VOICE PRESETS (use these instead of plain "male baritone"):
+- Deep male: worn velvet baritone / smoky tenement tenor / gravelled storyteller voice
+- Young male: raw street tenor / close-mic bedroom voice / cracked-edge earnest vocal
+- Gentle female: crystalline mezzo / breath-first folk soprano / intimate whisper alto
+- Powerful female: arena-stage alto belt / emotional floodgate mezzo / gospel-tinged contralto
+- Duet: worn velvet baritone x crystalline mezzo / smoky tenor x breath-first alto
+- Choir: SATB cathedral swell / layered gospel choir / cinematic mass choir
+
+═══ PRE-OUTPUT CHECKLIST (run silently before generating) ═══
+
+Before outputting lyrics, verify internally:
+- [ ] All rhymes taken from dictionaries above — none invented freely
+- [ ] Zero verb-verb rhyme chains (иду/найду/пройду) — max 1 per verse
+- [ ] Rhyme density ≥ 0.42 — rhyme in minimum every 2nd line
+- [ ] Key phrase (hook) repeated ≥ 3 times across sections
+- [ ] Each line: sing under 4/4 — word stress falls on strong beats
+- [ ] Syllables: RU 9–11 per line, EN 8–10 — recount each line
+- [ ] First Chorus line ≤ 8 syllables
+- [ ] Russian grammar: all cases and prepositions correct
+- [ ] Verse 2 carries NEW meaning — does not repeat Verse 1
+- [ ] Bridge contrasts with verses in rhythm or perspective
+- [ ] Section tags ALL in English — no Cyrillic in tags
+- [ ] Vocal settings block inserted before Verse 1
+
+If ANY item fails → fix before outputting. Never output until all pass.
 
 ═══ GENRE-SPECIFIC RULES ═══
 
@@ -263,7 +312,27 @@ NEGATIVE TAGS — add automatically:
 - Clean Pop/Indie/Lo-fi → no-808 no-clap
 - EDM/Hip-Hop/Electronic/Afrobeats → do NOT add no-808
 
-HOOK WORDS: extract 2-3 emotionally strong words from the chorus and include them in the style string. These help Suno match the musical energy to the lyrical hook.
+TIMBRAL VOICE PRESETS (use these instead of plain "male baritone"):
+- Deep male: worn velvet baritone / smoky tenement tenor / gravelled storyteller voice
+- Young male: raw street tenor / close-mic bedroom voice / cracked-edge earnest vocal
+- Gentle female: crystalline mezzo / breath-first folk soprano / intimate whisper alto
+- Powerful female: arena-stage alto belt / emotional floodgate mezzo / gospel-tinged contralto
+- Duet: worn velvet baritone x crystalline mezzo
+- Choir: SATB cathedral swell / layered gospel choir
+
+GENRE MIX TABLE (never use single genre — always hybrid):
+- sad pop → cinematic indie-folk x lo-fi x dream-pop
+- rock ballad → post-grunge x cinematic strings x alt-rock
+- pop ballad → neo-soul x 70s orchestral pop x bedroom pop
+- dance pop → disco-funk x synth-pop x future bass
+- chill → organic house x lo-fi jazz x ambient pop
+- russian pop → 70s soft rock x modern indie-folk x chamber pop warmth
+
+ERA ANCHORS (add to style string for unique sound):
+- 70s: Late 1970s LA session musician warmth
+- 80s: 1983 New York downtown club night
+- 90s: 1990s Seattle basement recording
+- 2000s: Early 2000s indie bedroom tape
 
 VOCAL DESCRIPTORS: use the provided voice range — "male baritone", "female mezzo-soprano", "duet", "choir SATB", etc.
 
