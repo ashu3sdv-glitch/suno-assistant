@@ -99,19 +99,27 @@ RANGE DESCRIPTION — always add after the note range, describing how voice beha
 - Soprano C3–C5: [light crystalline tone, full bloom above A4, effortless top register]
 - Lyric Soprano D3–D5: [gentle airy chest, luminous middle, floating pianissimo top]
 
-VOCAL STYLE — ALWAYS describe delivery PER SECTION, never generic words:
-BAD: [Vocal Style: warm, emotional]
-GOOD: [Vocal Style: intimate chest verse, vocal cry on pre-chorus, crescendo belting chorus, falsetto bridge, fading subtone outro]
+VOCAL STYLE — FORBIDDEN formats (these will be rejected):
+FORBIDDEN: [Vocal Style: crystalline, dreamy]
+FORBIDDEN: [Vocal Style: warm, emotional]
+FORBIDDEN: [Vocal Style: soft, melancholic]
+FORBIDDEN: [Vocal Style: powerful, belting]
+→ Any Vocal Style with only adjectives and NO section names is WRONG.
 
-Per-section delivery options to choose from:
-- Verse: intimate chest, close-mic whisper, parlando storytelling, breathy conversational
-- Pre-Chorus: rising intensity, vocal cry, speech-to-song, chest push
-- Chorus: belting, full chest power, arena projection, soaring head voice
+REQUIRED format — must name delivery technique FOR EACH SECTION:
+CORRECT: [Vocal Style: breathy intimate verse, vocal cry pre-chorus, crescendo belting chorus, falsetto bridge, fading subtone outro]
+CORRECT: [Vocal Style: parlando storytelling verse, chest push pre-chorus, full belt chorus, raw spoken bridge, hummed outro]
+
+Per-section delivery — choose one per section:
+- Verse: breathy intimate, close-mic whisper, parlando storytelling, intimate chest
+- Pre-Chorus: vocal cry, rising intensity, speech-to-song, chest push
+- Chorus: crescendo belting, full chest power, arena projection, soaring head voice
 - Bridge: falsetto, subtone ghost, spoken word, raw exposed vocal
 - Outro: fading subtone, dying fall, whispered echo, hummed close
 
-ABSOLUTE RULE: Vocal Style must name at least 3 sections with specific delivery technique.
-NEVER write generic adjectives alone — always pair with section name.
+ABSOLUTE RULE: Vocal Style MUST contain section names (verse/pre-chorus/chorus/bridge/outro) paired with technique.
+MINIMUM 3 sections described. If you write only adjectives → rewrite before outputting.
+PRE-OUTPUT CHECK: Does my Vocal Style contain the words "verse", "chorus", "bridge"? If NO → rewrite it.
 
 Examples:
 [Female Vocal] [Mezzo-Soprano A3–A5] [rich chest voice in lower octave, soft and thin above E5, warm mid-range power] [Vocal Style: breathy intimate verse, vocal cry pre-chorus, crescendo belting chorus, falsetto bridge, fading subtone outro]
@@ -534,8 +542,24 @@ export default function SunoAssistant() {
 
         {/* Header */}
         <div style={{ marginBottom: "28px" }}>
-          <div style={{ fontFamily: "'DM Mono', monospace", fontSize: "10px", letterSpacing: "0.2em", color: "#00e5a0", marginBottom: "10px", textTransform: "uppercase" }}>
-            AI Music Lab ✦ Suno Assistant
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "10px" }}>
+            <div style={{ fontFamily: "'DM Mono', monospace", fontSize: "10px", letterSpacing: "0.2em", color: "#00e5a0", textTransform: "uppercase" }}>
+              AI Music Lab ✦ Suno Assistant
+            </div>
+            {(theme || lyrics || genres.length > 0 || mood || voices.length > 0 || era) && (
+              <button onClick={resetAll} style={{
+                background: "transparent", border: "1px solid #2a2a2a",
+                borderRadius: "8px", color: "#555", fontSize: "10px",
+                fontFamily: "'DM Mono', monospace", padding: "5px 10px",
+                cursor: "pointer", letterSpacing: "0.08em", transition: "all 0.2s",
+                flexShrink: 0
+              }}
+                onMouseEnter={e => { e.target.style.borderColor = "#00e5a0"; e.target.style.color = "#00e5a0"; }}
+                onMouseLeave={e => { e.target.style.borderColor = "#2a2a2a"; e.target.style.color = "#555"; }}
+              >
+                ↺ NEW SONG
+              </button>
+            )}
           </div>
           <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: "clamp(26px, 7vw, 42px)", fontWeight: "700", fontStyle: "italic", lineHeight: "1.1", color: "#f0f0e8", marginBottom: "8px" }}>
             Your song,<br />in 30 seconds.
