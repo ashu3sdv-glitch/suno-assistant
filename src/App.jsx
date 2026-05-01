@@ -542,24 +542,8 @@ export default function SunoAssistant() {
 
         {/* Header */}
         <div style={{ marginBottom: "28px" }}>
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "10px" }}>
-            <div style={{ fontFamily: "'DM Mono', monospace", fontSize: "10px", letterSpacing: "0.2em", color: "#00e5a0", textTransform: "uppercase" }}>
-              AI Music Lab ✦ Suno Assistant
-            </div>
-            {(theme || lyrics || genres.length > 0 || mood || voices.length > 0 || era) && (
-              <button onClick={resetAll} style={{
-                background: "transparent", border: "1px solid #2a2a2a",
-                borderRadius: "8px", color: "#555", fontSize: "10px",
-                fontFamily: "'DM Mono', monospace", padding: "5px 10px",
-                cursor: "pointer", letterSpacing: "0.08em", transition: "all 0.2s",
-                flexShrink: 0
-              }}
-                onMouseEnter={e => { e.target.style.borderColor = "#00e5a0"; e.target.style.color = "#00e5a0"; }}
-                onMouseLeave={e => { e.target.style.borderColor = "#2a2a2a"; e.target.style.color = "#555"; }}
-              >
-                ↺ NEW SONG
-              </button>
-            )}
+          <div style={{ fontFamily: "'DM Mono', monospace", fontSize: "10px", letterSpacing: "0.2em", color: "#00e5a0", marginBottom: "10px", textTransform: "uppercase" }}>
+            AI Music Lab ✦ Suno Assistant
           </div>
           <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: "clamp(26px, 7vw, 42px)", fontWeight: "700", fontStyle: "italic", lineHeight: "1.1", color: "#f0f0e8", marginBottom: "8px" }}>
             Your song,<br />in 30 seconds.
@@ -876,7 +860,29 @@ export default function SunoAssistant() {
           </div>
         )}
 
-        <div style={{ marginTop: "48px", textAlign: "center", fontSize: "10px", fontFamily: "'DM Mono', monospace", color: "#1e1e1e", letterSpacing: "0.1em" }}>
+        {/* NEW SONG button — always visible at bottom */}
+        <div style={{ marginTop: "32px", textAlign: "center" }}>
+          <button onClick={resetAll} style={{
+            background: styleReady ? "#001a12" : "transparent",
+            border: `1px solid ${styleReady ? "#00e5a0" : "#2a2a2a"}`,
+            borderRadius: "12px",
+            color: styleReady ? "#00e5a0" : "#333",
+            fontSize: "13px",
+            fontFamily: "'DM Mono', monospace",
+            padding: "14px 32px",
+            cursor: "pointer",
+            letterSpacing: "0.1em",
+            transition: "all 0.2s",
+            width: "100%",
+          }}
+            onMouseEnter={e => { e.currentTarget.style.borderColor = "#00e5a0"; e.currentTarget.style.color = "#00e5a0"; e.currentTarget.style.background = "#001a12"; }}
+            onMouseLeave={e => { e.currentTarget.style.borderColor = styleReady ? "#00e5a0" : "#2a2a2a"; e.currentTarget.style.color = styleReady ? "#00e5a0" : "#333"; e.currentTarget.style.background = styleReady ? "#001a12" : "transparent"; }}
+          >
+            ↺ START NEW SONG
+          </button>
+        </div>
+
+        <div style={{ marginTop: "24px", textAlign: "center", fontSize: "10px", fontFamily: "'DM Mono', monospace", color: "#1e1e1e", letterSpacing: "0.1em" }}>
           AI MUSIC LAB ✦ SUNO ASSISTANT ✦ V0.5
         </div>
       </div>
