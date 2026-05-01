@@ -88,12 +88,36 @@ OUTPUT FORMAT (strict JSON, no markdown):
 }
 
 ═══ VOCAL SETTINGS FORMAT (first line always) ═══
-Format: [Type] [Range] [Vocal Style: description]
+Format: [Type] [Range + Range Description] [Vocal Style: per-section delivery]
+
+RANGE DESCRIPTION — always add after the note range, describing how voice behaves:
+- Bass E1–E3: [resonant chest depth, loses body above D3, powerful low-mid]
+- Baritone A1–A3: [rich velvet tone in chest, slightly thinning above G3, warm dark centre]
+- Tenor C2–C4: [bright chest below A3, ringing passaggio C3–E3, soaring head above]
+- Contralto E2–E4: [deep smoky chest, full-bodied through F3, silky upper register]
+- Mezzo A2–A4: [rich chest voice in lower octave, soft and thin above E4, warm mid-range power]
+- Soprano C3–C5: [light crystalline tone, full bloom above A4, effortless top register]
+- Lyric Soprano D3–D5: [gentle airy chest, luminous middle, floating pianissimo top]
+
+VOCAL STYLE — ALWAYS describe delivery PER SECTION, never generic words:
+BAD: [Vocal Style: warm, emotional]
+GOOD: [Vocal Style: intimate chest verse, vocal cry on pre-chorus, crescendo belting chorus, falsetto bridge, fading subtone outro]
+
+Per-section delivery options to choose from:
+- Verse: intimate chest, close-mic whisper, parlando storytelling, breathy conversational
+- Pre-Chorus: rising intensity, vocal cry, speech-to-song, chest push
+- Chorus: belting, full chest power, arena projection, soaring head voice
+- Bridge: falsetto, subtone ghost, spoken word, raw exposed vocal
+- Outro: fading subtone, dying fall, whispered echo, hummed close
+
+ABSOLUTE RULE: Vocal Style must name at least 3 sections with specific delivery technique.
+NEVER write generic adjectives alone — always pair with section name.
+
 Examples:
-[Duet] [Male Baritone G2–G4 | Female Alto G3–D5] [Vocal Style: dramatic cinematic duet, dark electronic]
-[Male Vocal] [Baritone G2–G4] [Vocal Style: raspy, gritty, urban]
-[Female Vocal] [Soprano C4–A5] [Vocal Style: belting, emotional, powerful]
-[Choir] [SATB] [Vocal Style: full choral arrangement, epic, no solo voice]
+[Female Vocal] [Mezzo-Soprano A3–A5] [rich chest voice in lower octave, soft and thin above E5, warm mid-range power] [Vocal Style: breathy intimate verse, vocal cry pre-chorus, crescendo belting chorus, falsetto bridge, fading subtone outro]
+[Male Vocal] [Baritone G2–G4] [rich velvet tone in chest, slightly thinning above G3] [Vocal Style: parlando storytelling verse, chest push pre-chorus, full belt chorus, raw spoken bridge, hummed outro]
+[Duet] [Male Baritone G2–G4 | Female Mezzo A3–F5] [warm dark baritone | rich mezzo chest] [Vocal Style: solo intimate verse, unison pre-chorus tension, harmony chorus swell, call-response bridge]
+
 For duets tag each section: [Verse — Male], [Chorus — Duet], [Bridge — Male + Female]
 Range ALWAYS with notes: G2–G4, C4–A5 — never "low" or "high"
 
@@ -441,6 +465,13 @@ export default function SunoAssistant() {
   );
 
   const settingsSummary = [era, genres.join(" · "), mood, voices.join(" · ")].filter(Boolean).join("  ·  ");
+
+  const resetAll = () => {
+    setTheme(""); setLang("RU"); setEra(""); setGenres([]); setMood("");
+    setVoices([]); setVoiceRange(""); setLyrics(""); setTitle("");
+    setLyricsReady(false); setStyleString(""); setStyleReady(false);
+    setFixRequest(""); setError1(""); setError2(""); setInstruments("");
+  };
 
   return (
     <div style={{ minHeight: "100vh", background: "#080808", color: "#e8e8e0", fontFamily: "'DM Sans', sans-serif", overflowX: "hidden" }}>
