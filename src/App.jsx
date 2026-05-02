@@ -167,11 +167,31 @@ ENGLISH QUALITY RHYMES:
 - Max 3-4 unique melodies
 
 WRITING TECHNIQUES:
-1. Open vowels А О Э on strong beats
-2. Alliteration in chorus
-3. Internal rhymes
+1. Open vowels А О Э on strong beats (not Ы Й Щ)
+2. Alliteration in chorus — repeated consonants create momentum
+3. Internal rhymes within lines for density
 4. Dynamic phrase pattern: long–short–long OR short–long–short
-5. Bounce words with stress on beat 1
+5. Bounce words with stress on beat 1: кайф, рай, бой, старт, бам
+
+IMAGE RULES (apply to every verse):
+- Each line must carry ONE clear image — not two half-ideas joined by "но/и/а"
+- BAD: "Я кричу, но ты не помнишь" — two weak ideas glued together
+- GOOD: "Я кричу — волна уносит" — one action, one consequence, one image
+- Images must be CONCRETE: не "грусть", а "мёртвый омут" / не "боль", а "соль на губах"
+- Every verse must have ONE anchor image that carries the whole section
+- Avoid abstract nouns as subject: не "любовь ушла", а "ты закрыла дверь"
+
+RHYTHM RULES (check every line):
+- Stress must fall on ODD syllables (1st, 3rd, 5th) — never on weak endings
+- BAD stress: "Я кричу́, но ты не по́мнишь" — "помнишь" ends on weak syllable
+- GOOD stress: "Я кричу́ — волна́ уно́сит" — every stress lands cleanly
+- Lines in same section must match syllable count ±1
+- Never end a line on a gerund (-я, -ясь) or weak particle (же, бы, ли)
+
+FORBIDDEN images (too clichéd):
+- звёзды светят / сердце бьётся / слёзы льются / ночь темна
+- душа поёт / мечта зовёт / любовь как сон
+- Replace with SPECIFIC physical detail: запах, звук, движение, температура
 
 TIMBRAL VOICE PRESETS:
 - Deep male: worn velvet baritone / smoky tenement tenor / gravelled storyteller voice
@@ -186,14 +206,18 @@ PRE-OUTPUT CHECKLIST:
 - [ ] Zero verb-verb rhyme chains — max 1 per verse
 - [ ] Rhyme density ≥ 0.42
 - [ ] Hook repeated ≥ 3 times
-- [ ] Word stress on strong beats
-- [ ] Syllables: RU 9–11, EN 8–10
+- [ ] Word stress on strong beats — no weak endings stressed
+- [ ] Syllables: RU 9–11, EN 8–10 — lines in same section match ±1
 - [ ] First Chorus line ≤ 8 syllables
 - [ ] Russian grammar correct
 - [ ] Verse 2 carries NEW meaning
 - [ ] Bridge contrasts in rhythm or perspective
 - [ ] Section tags ALL in English
 - [ ] Vocal settings block before Verse 1
+- [ ] Every line has ONE clear image — no two half-ideas joined by "но/и/а"
+- [ ] Zero clichéd abstractions (звёзды светят / сердце бьётся / душа поёт)
+- [ ] Each verse has ONE anchor concrete image (physical detail)
+- [ ] No line ends on weak syllable (-ишь, -ешь, -же, -бы, -ли)
 
 GENRE-SPECIFIC RULES:
 ROCK: Lines 6-8 syllables MAX. Strong accent beat 1. AABB. Short punchy phrases.
