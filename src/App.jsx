@@ -348,11 +348,9 @@ Return ONLY the single line, nothing else.`;
 export default function SunoAssistant() {
   const [theme, setTheme] = useState("");
   const [lang, setLang] = useState("RU");
-  const [era, setEra] = useState("");
   const [genres, setGenres] = useState([]);
   const [mood, setMood] = useState("");
   const [voices, setVoices] = useState([]);
-  const [voiceRange, setVoiceRange] = useState("");
   const [lyrics, setLyrics] = useState("");
   const [title, setTitle] = useState("");
   const [lyricsReady, setLyricsReady] = useState(false);
@@ -378,10 +376,9 @@ export default function SunoAssistant() {
   };
 
   const toggleVoice = (v) => {
-    if (voices.includes(v)) { setVoices(prev => prev.filter(x => x !== v)); setVoiceRange(""); return; }
+    if (voices.includes(v)) { setVoices(prev => prev.filter(x => x !== v)); return; }
     if (voices.length >= 2) return;
     setVoices(prev => [...prev, v]);
-    setVoiceRange("");
   };
 
   const generateLyrics = async () => {
@@ -390,10 +387,9 @@ export default function SunoAssistant() {
     const params = [
       `Theme: ${theme}`,
       `Lyrics language: ${lang === "RU" ? "Russian" : "English"} — write ALL lyrics strictly in this language only`,
-      era ? `Era: ${era}` : "",
       genres.length > 0 ? `Genre: ${genres.join(", ")}` : "Genre: choose the most fitting genre yourself based on theme and mood",
       mood ? `Mood: ${mood}` : "",
-      voices.length > 0 ? `Voice: ${voices.join(", ")}${voiceRange ? " | Range: " + voiceRange : ""}` : "",
+      voices.length > 0 ? `Voice: ${voices.join(", ")}` : "",
       instruments ? `Key instruments: ${instruments}` : "",
     ].filter(Boolean).join("\n");
     try {
@@ -429,8 +425,8 @@ export default function SunoAssistant() {
     try {
       const params = [
         `Lyrics:\n${lyrics}`, `Genre mix: ${genres.join(", ")}`,
-        era ? `Era: ${era}` : "", mood ? `Mood: ${mood}` : "",
-        voices.length > 0 ? `Voice: ${voices.join(", ")}${voiceRange ? " (" + voiceRange + ")" : ""}` : "",
+        mood ? `Mood: ${mood}` : "",
+        voices.length > 0 ? `Voice: ${voices.join(", ")}` : "",
         voices.includes("No vocals") ? "INSTRUMENTAL — add no-vocals tag" : "",
         instruments ? `Instruments: ${instruments}` : "",
         `Language: ${lang === "RU" ? "Russian" : "English"} (do NOT include this in style string)`,
@@ -472,11 +468,11 @@ export default function SunoAssistant() {
     </button>
   );
 
-  const settingsSummary = [era, genres.join(" · "), mood, voices.join(" · ")].filter(Boolean).join("  ·  ");
+  const settingsSummary = [genres.join(" · "), mood, voices.join(" · ")].filter(Boolean).join("  ·  ");
 
   const resetAll = () => {
-    setTheme(""); setLang("RU"); setEra(""); setGenres([]); setMood("");
-    setVoices([]); setVoiceRange(""); setLyrics(""); setTitle("");
+    setTheme(""); setLang("RU"); setGenres([]); setMood("");
+    setVoices([]); setLyrics(""); setTitle("");
     setLyricsReady(false); setStyleString(""); setStyleReady(false);
     setFixRequest(""); setError1(""); setError2(""); setInstruments("");
   };
@@ -583,18 +579,6 @@ export default function SunoAssistant() {
             </div>
           </div>
 
-          {/* Era */}
-          <div style={{ marginBottom: "16px" }}>
-            <label className="fl">Era <span style={{ color: "#222", textTransform: "none", letterSpacing: 0 }}>(optional)</span></label>
-            <div className="g5">
-              {ERAS.map(e => (
-                <div key={e} className={`pill ${era === e ? "active" : ""}`}
-                  onClick={() => setEra(prev => prev === e ? "" : e)}>{e}</div>
-              ))}
-            </div>
-            {era && <div className="hint" style={{ marginTop: "6px" }}>✦ Lyrics will match the style of the {era} era</div>}
-          </div>
-
           {/* Genre */}
           <div style={{ marginBottom: "16px" }}>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "6px" }}>
@@ -682,24 +666,6 @@ export default function SunoAssistant() {
             </div>
             {voices.length === 2 && <div style={{ fontSize: "11px", fontFamily: "'DM Mono', monospace", marginTop: "8px", color: "#00e5a0" }}>✦ Maximum 2 voices selected</div>}
 
-            {/* Voice range */}
-            {voices.length === 1 && VOICE_RANGES[voices[0]] && (
-              <div style={{ marginTop: "12px" }}>
-                <div style={{ fontSize: "10px", fontFamily: "'DM Mono', monospace", color: "#444", letterSpacing: "0.12em", marginBottom: "8px" }}>
-                  VOICE RANGE <span style={{ color: "#222", letterSpacing: 0, textTransform: "none" }}>(optional)</span>
-                </div>
-                <div className="g4-voice">
-                  {VOICE_RANGES[voices[0]].map(({ label, range }) => (
-                    <div key={label} className={`pill ${voiceRange === range ? "active" : ""}`}
-                      onClick={() => setVoiceRange(prev => prev === range ? "" : range)}
-                      style={{ fontSize: "11px", padding: "8px 4px" }}>
-                      <div>{label}</div>
-                      {range && <div style={{ fontSize: "9px", color: voiceRange === range ? "#00e5a0" : "#555", marginTop: "2px" }}>{range}</div>}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
           </div>
 
           {/* Instruments */}
@@ -777,15 +743,10 @@ export default function SunoAssistant() {
                 {remaining > 0 ? "GENERATIONS LEFT TODAY" : "RESETS TOMORROW"}
               </div>
             </div>
-            <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: "8px" }}>
-              <div style={{ display: "flex", gap: "4px" }}>
-                {Array.from({ length: DAILY_LIMIT }).map((_, i) => (
-                  <div key={i} style={{ width: "8px", height: "8px", borderRadius: "50%", background: i < usageCount ? "#1e1e1e" : "#00e5a0", transition: "all 0.4s" }} />
-                ))}
-              </div>
-              <button onClick={() => { localStorage.removeItem("suno_usage"); setUsageCount(0); }} style={{ background: "transparent", border: "1px solid #2a2a2a", borderRadius: "6px", color: "#333", fontSize: "10px", fontFamily: "'DM Mono', monospace", padding: "3px 8px", cursor: "pointer" }}>
-                DEV RESET
-              </button>
+            <div style={{ display: "flex", gap: "4px" }}>
+              {Array.from({ length: DAILY_LIMIT }).map((_, i) => (
+                <div key={i} style={{ width: "8px", height: "8px", borderRadius: "50%", background: i < usageCount ? "#1e1e1e" : "#00e5a0", transition: "all 0.4s" }} />
+              ))}
             </div>
           </div>
 
