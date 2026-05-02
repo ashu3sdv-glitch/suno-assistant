@@ -795,28 +795,20 @@ export default function SunoAssistant() {
             </div>
 
             {/* Update buttons */}
-            <div style={{ borderTop: "1px solid #1a1a1a", paddingTop: "16px", marginBottom: "16px" }}>
+            <div style={{ borderTop: "1px solid #1a1a1a", paddingTop: "16px" }}>
               <div style={{ fontSize: "10px", fontFamily: "'DM Mono', monospace", color: "#444", letterSpacing: "0.12em", marginBottom: "10px" }}>
                 CHANGED SOMETHING? UPDATE:
               </div>
-              <div className="update-grid">
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px" }}>
                 <button onClick={updateVocal} disabled={updatingVocal || voices.length === 0}
-                  style={{ padding: "12px 8px", background: "transparent", border: "1px solid #1e1e1e", borderRadius: "8px", color: "#666", fontSize: "11px", fontFamily: "'DM Mono', monospace", cursor: "pointer", transition: "all 0.2s" }}>
+                  style={{ padding: "12px 8px", background: "transparent", border: "1px solid #1e1e1e", borderRadius: "8px", color: voices.length === 0 ? "#333" : "#666", fontSize: "11px", fontFamily: "'DM Mono', monospace", cursor: voices.length === 0 ? "not-allowed" : "pointer", transition: "all 0.2s", opacity: voices.length === 0 ? 0.4 : 1 }}>
                   {updatingVocal ? <span className="pulse" /> : "UPDATE VOCAL"}
                 </button>
                 <button onClick={generateStyle} disabled={generatingStyle || !lyrics.trim() || remaining <= 0}
                   style={{ padding: "12px 8px", background: "transparent", border: "1px solid #1e1e1e", borderRadius: "8px", color: "#666", fontSize: "11px", fontFamily: "'DM Mono', monospace", cursor: "pointer", transition: "all 0.2s" }}>
                   {generatingStyle ? <span className="pulse" /> : "UPDATE STYLE"}
                 </button>
-                <button onClick={updateBoth} disabled={updatingBoth || voices.length === 0 || remaining <= 0}
-                  style={{ padding: "12px 8px", background: "#001a12", border: "1px solid #00e5a0", borderRadius: "8px", color: "#00e5a0", fontSize: "11px", fontFamily: "'DM Mono', monospace", cursor: "pointer", transition: "all 0.2s" }}>
-                  {updatingBoth ? <span className="pulse" /> : "UPDATE BOTH"}
-                </button>
               </div>
-            </div>
-
-            <div style={{ borderTop: "1px solid #1a1a1a", paddingTop: "16px", display: "flex", justifyContent: "center" }}>
-              <CopyBtn text={`${title}\n\n--- LYRICS ---\n${lyrics}\n\n--- SUNO STYLE ---\n${styleString}`} label="COPY FULL PACKAGE" id="all" />
             </div>
           </div>
         )}
