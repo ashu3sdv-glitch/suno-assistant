@@ -393,6 +393,114 @@ export default function SunoAssistant() {
   const [usageCount, setUsageCount] = useState(() => getUsage().count);
   const remaining = DAILY_LIMIT - usageCount;
 
+  const T = {
+    RU: {
+      tagline: "Твоя песня,",
+      tagline2: "за 30 секунд.",
+      subtitle: "Настрой параметры — и получи текст и стиль для Suno.",
+      step1title: "Параметры и текст песни",
+      step2title: "Строка стиля для Suno",
+      themeLabel: "Тема / Идея",
+      themePlaceholder: "Дождливый вечер в городе, который не забыть...",
+      langLabel: "Язык текста",
+      genreLabel: "Genre",
+      genreMax: "(макс. 3)",
+      genreHint: "Не знаешь? Оставь пустым — AI выберет сам",
+      genreGood: "● подходит",
+      genreConflict: "⚠ конфликт",
+      genreMaxMsg: "✦ Выбрано максимум 3 жанра",
+      moodLabel: "Mood",
+      moodOptional: "(необязательно)",
+      voiceLabel: "Voice",
+      voiceMax: "(макс. 2)",
+      voiceHint: "Не знаешь? Оставь пустым — AI выберет сам",
+      voiceMaxMsg: "✦ Выбрано максимум 2 голоса",
+      instrLabel: "Instruments",
+      instrOptional: "(необязательно)",
+      instrPlaceholder: "accordion, duduk, banjo, sitar, kora...",
+      instrHint: "1-2 инструмента — оптимально",
+      lyricsLabel: "Текст",
+      lyricsEditHint: "— правь здесь или используй Исправить",
+      lyricsPlaceholder: "Текст появится здесь — или вставь свой и переходи к шагу 2",
+      fixPlaceholder: 'Опиши правку: "укороти строки" или "рифма на -ая"',
+      fixBtn: "ИСПРАВИТЬ →",
+      genLyricsBtn: "СГЕНЕРИРОВАТЬ ТЕКСТ →",
+      regenLyricsBtn: "СГЕНЕРИРОВАТЬ СНОВА",
+      genLyricsLoading: "ГЕНЕРИРУЮ ТЕКСТ...",
+      genStyleBtn: "СГЕНЕРИРОВАТЬ СТИЛЬ →",
+      genStyleLoading: "ГЕНЕРИРУЮ СТИЛЬ...",
+      leftToday: "ГЕНЕРАЦИЙ ОСТАЛОСЬ СЕГОДНЯ",
+      resetsTomorrow: "ОБНОВИТСЯ ЗАВТРА",
+      readyLabel: "✦ ГОТОВО — ВСТАВЬ В SUNO",
+      lyricsResultLabel: "Текст песни",
+      copyLyrics: "СКОПИРОВАТЬ ТЕКСТ",
+      copyStyle: "СКОПИРОВАТЬ СТИЛЬ",
+      updateHint: "ИЗМЕНИЛ НАСТРОЙКИ? ОБНОВИ:",
+      updateVocal: "ОБНОВИТЬ ВОКАЛ",
+      updateStyle: "ОБНОВИТЬ СТИЛЬ",
+      newSong: "↺ НОВАЯ ПЕСНЯ",
+      feedbackTitle: "ОБРАТНАЯ СВЯЗЬ",
+      feedbackText: "Нашёл ошибку? Есть идея? Хочешь больше генераций?",
+      feedbackText2: "Напиши — отвечу лично.",
+      errTheme: "Введите тему или идею.",
+      errLimit: "Лимит на сегодня исчерпан. Возвращайся завтра.",
+      errGen: "Ошибка генерации. Попробуй ещё раз.",
+    },
+    EN: {
+      tagline: "Your song,",
+      tagline2: "in 30 seconds.",
+      subtitle: "Set your parameters — then generate lyrics and style string.",
+      step1title: "Parameters & lyrics",
+      step2title: "Generate Suno style string",
+      themeLabel: "Theme / Idea",
+      themePlaceholder: "A rainy evening in a city you can't forget...",
+      langLabel: "Lyrics language",
+      genreLabel: "Genre",
+      genreMax: "(max 3)",
+      genreHint: "Not sure? Leave empty — AI picks automatically",
+      genreGood: "● good match",
+      genreConflict: "⚠ may conflict",
+      genreMaxMsg: "✦ Maximum 3 genres selected",
+      moodLabel: "Mood",
+      moodOptional: "(optional)",
+      voiceLabel: "Voice",
+      voiceMax: "(max 2)",
+      voiceHint: "Not sure? Leave empty — AI picks automatically",
+      voiceMaxMsg: "✦ Maximum 2 voices selected",
+      instrLabel: "Instruments",
+      instrOptional: "(optional)",
+      instrPlaceholder: "accordion, duduk, banjo, sitar, kora...",
+      instrHint: "1-2 instruments work best",
+      lyricsLabel: "Lyrics",
+      lyricsEditHint: "— edit directly or use Fix below",
+      lyricsPlaceholder: "Lyrics will appear here — or paste your own and go to Step 2",
+      fixPlaceholder: 'Describe the fix: "shorten lines" or "add rhyme"',
+      fixBtn: "FIX →",
+      genLyricsBtn: "GENERATE LYRICS →",
+      regenLyricsBtn: "REGENERATE LYRICS",
+      genLyricsLoading: "GENERATING LYRICS...",
+      genStyleBtn: "GENERATE STYLE STRING →",
+      genStyleLoading: "GENERATING STYLE...",
+      leftToday: "GENERATIONS LEFT TODAY",
+      resetsTomorrow: "RESETS TOMORROW",
+      readyLabel: "✦ READY TO PASTE INTO SUNO",
+      lyricsResultLabel: "Lyrics",
+      copyLyrics: "COPY LYRICS",
+      copyStyle: "COPY STYLE",
+      updateHint: "CHANGED SOMETHING? UPDATE:",
+      updateVocal: "UPDATE VOCAL",
+      updateStyle: "UPDATE STYLE",
+      newSong: "↺ START NEW SONG",
+      feedbackTitle: "FEEDBACK",
+      feedbackText: "Found a bug? Have an idea? Want more generations?",
+      feedbackText2: "Write — I'll reply personally.",
+      errTheme: "Enter a theme or idea.",
+      errLimit: "Daily limit reached. Come back tomorrow.",
+      errGen: "Generation failed. Try again.",
+    }
+  };
+  const t = T[lang];
+
   const toggleGenre = (g) => {
     if (genres.includes(g)) { setGenres(prev => prev.filter(x => x !== g)); return; }
     if (genres.length >= 3) return;
@@ -406,7 +514,7 @@ export default function SunoAssistant() {
   };
 
   const generateLyrics = async () => {
-    if (!theme.trim()) { setError1("Enter a theme or idea."); return; }
+    if (!theme.trim()) { setError1(t.errTheme); return; }
     setError1(""); setGeneratingLyrics(true); setLyricsReady(false); setStyleReady(false); setStyleString("");
     const params = [
       `Theme: ${theme}`,
@@ -427,7 +535,7 @@ export default function SunoAssistant() {
       const parsed = JSON.parse(text.slice(s, e2 + 1));
       if (!parsed.lyrics) throw new Error("No lyrics in response");
       setTitle(parsed.title || ""); setLyrics(parsed.lyrics); setLyricsReady(true);
-    } catch (e) { setError1("Failed: " + e.message); }
+    } catch (e) { setError1(t.errTheme + " " + e.message); }
     setGeneratingLyrics(false);
   };
 
@@ -444,7 +552,7 @@ export default function SunoAssistant() {
   };
 
   const generateStyle = async () => {
-    if (remaining <= 0) { setError2("Daily limit reached. Come back tomorrow."); return; }
+    if (remaining <= 0) { setError2(t.errLimit); return; }
     setError2(""); setGeneratingStyle(true); setStyleReady(false);
     try {
       const params = [
@@ -460,7 +568,7 @@ export default function SunoAssistant() {
       const text = data.content?.map(i => i.text || "").join("") || "";
       const parsed = JSON.parse(text.replace(/```json|```/g, "").trim());
       setStyleString(parsed.style); setStyleReady(true); setUsageCount(incrementUsage());
-    } catch (e) { setError2("Generation failed. Try again."); }
+    } catch (e) { setError2(t.errGen); }
     setGeneratingStyle(false);
   };
 
@@ -566,10 +674,10 @@ export default function SunoAssistant() {
             AI Music Lab ✦ Suno Assistant
           </div>
           <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: "clamp(26px, 7vw, 42px)", fontWeight: "700", fontStyle: "italic", lineHeight: "1.1", color: "#f0f0e8", marginBottom: "8px" }}>
-            Your song,<br />in 30 seconds.
+            {t.tagline}<br />{t.tagline2}
           </h1>
           <p style={{ color: "#444", fontSize: "13px", lineHeight: "1.6" }}>
-            Set your parameters — then generate lyrics and style string.
+            {t.subtitle}
           </p>
         </div>
 
@@ -577,14 +685,14 @@ export default function SunoAssistant() {
         <div className="card" style={{ marginBottom: "16px" }}>
           <div className="step-row">
             <div className={`snum ${lyricsReady ? "done" : ""}`}>{lyricsReady ? "✓" : "1"}</div>
-            <div className="stitle">Set parameters & generate lyrics</div>
+            <div className="stitle">{t.step1title}</div>
           </div>
 
           {/* Theme */}
           <div style={{ marginBottom: "16px" }}>
-            <label className="fl">Theme / Idea</label>
+            <label className="fl">{t.themeLabel}</label>
             <textarea className="ifield" rows={3}
-              placeholder="A rainy evening in a city you can't forget..."
+              placeholder={t.themePlaceholder}
               value={theme} onChange={e => setTheme(e.target.value)}
               style={{ padding: "12px 14px", resize: "none", lineHeight: "1.6" }}
             />
@@ -592,7 +700,7 @@ export default function SunoAssistant() {
 
           {/* Language */}
           <div style={{ marginBottom: "16px" }}>
-            <label className="fl">Lyrics language</label>
+            <label className="fl">{t.langLabel}</label>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px" }}>
               {[["RU", "Русский"], ["EN", "English"]].map(([code, label]) => (
                 <div key={code} className={`pill ${lang === code ? "active" : ""}`}
@@ -606,7 +714,7 @@ export default function SunoAssistant() {
           {/* Genre */}
           <div style={{ marginBottom: "16px" }}>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "6px" }}>
-              <label className="fl" style={{ marginBottom: 0 }}>Genre <span style={{ color: "#222", textTransform: "none", letterSpacing: 0 }}>(max 3)</span></label>
+              <label className="fl" style={{ marginBottom: 0 }}>{t.genreLabel} <span style={{ color: "#222", textTransform: "none", letterSpacing: 0 }}>{t.genreMax}</span></label>
               <div className="counter-row">
                 {Array.from({ length: 3 }).map((_, i) => (
                   <div key={i} style={{ width: "7px", height: "7px", borderRadius: "50%", background: i < genres.length ? "#00e5a0" : "#1e1e1e", transition: "all 0.3s" }} />
@@ -617,7 +725,7 @@ export default function SunoAssistant() {
               </div>
             </div>
             <div style={{ fontSize: "11px", color: "#2a2a2a", fontFamily: "'DM Mono', monospace", marginBottom: "8px" }}>
-              Not sure? Leave empty — AI picks automatically
+              {t.genreHint}
             </div>
             {genres.length > 0 && <div className="sel-row">✦ {genres.join(" · ")}</div>}
             <div className="g4">
@@ -642,16 +750,16 @@ export default function SunoAssistant() {
             </div>
             {genres.length > 0 && genres.length < 3 && (
               <div style={{ fontSize: "10px", fontFamily: "'DM Mono', monospace", marginTop: "8px", color: "#2a2a2a" }}>
-                <span style={{ color: "#00e5a030", marginRight: "10px" }}>● good match</span>
-                <span>⚠ may conflict</span>
+                <span style={{ color: "#00e5a030", marginRight: "10px" }}>{t.genreGood}</span>
+                <span>{t.genreConflict}</span>
               </div>
             )}
-            {genres.length === 3 && <div style={{ fontSize: "11px", fontFamily: "'DM Mono', monospace", marginTop: "8px", color: "#00e5a0" }}>✦ Maximum 3 genres selected</div>}
+            {genres.length === 3 && <div style={{ fontSize: "11px", fontFamily: "'DM Mono', monospace", marginTop: "8px", color: "#00e5a0" }}>{t.genreMaxMsg}</div>}
           </div>
 
           {/* Mood */}
           <div style={{ marginBottom: "16px" }}>
-            <label className="fl">Mood <span style={{ color: "#222", textTransform: "none", letterSpacing: 0 }}>(optional)</span></label>
+            <label className="fl">{t.moodLabel} <span style={{ color: "#222", textTransform: "none", letterSpacing: 0 }}>{t.moodOptional}</span></label>
             <div className="g5">
               {MOODS.map(m => (
                 <div key={m} className={`pill ${mood === m ? "active" : ""}`}
@@ -663,7 +771,7 @@ export default function SunoAssistant() {
           {/* Voice */}
           <div style={{ marginBottom: "16px" }}>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "6px" }}>
-              <label className="fl" style={{ marginBottom: 0 }}>Voice <span style={{ color: "#222", textTransform: "none", letterSpacing: 0 }}>(max 2)</span></label>
+              <label className="fl" style={{ marginBottom: 0 }}>{t.voiceLabel} <span style={{ color: "#222", textTransform: "none", letterSpacing: 0 }}>{t.voiceMax}</span></label>
               <div className="counter-row">
                 {Array.from({ length: 2 }).map((_, i) => (
                   <div key={i} style={{ width: "7px", height: "7px", borderRadius: "50%", background: i < voices.length ? "#00e5a0" : "#1e1e1e", transition: "all 0.3s" }} />
@@ -674,7 +782,7 @@ export default function SunoAssistant() {
               </div>
             </div>
             <div style={{ fontSize: "11px", color: "#2a2a2a", fontFamily: "'DM Mono', monospace", marginBottom: "8px" }}>
-              Not sure? Leave empty — AI picks automatically
+              {t.voiceHint}
             </div>
             {voices.length > 0 && <div className="sel-row">✦ {voices.join(" · ")}</div>}
             <div className="g3">
@@ -688,19 +796,18 @@ export default function SunoAssistant() {
                 );
               })}
             </div>
-            {voices.length === 2 && <div style={{ fontSize: "11px", fontFamily: "'DM Mono', monospace", marginTop: "8px", color: "#00e5a0" }}>✦ Maximum 2 voices selected</div>}
-
+            {voices.length === 2 && <div style={{ fontSize: "11px", fontFamily: "'DM Mono', monospace", marginTop: "8px", color: "#00e5a0" }}>{t.voiceMaxMsg}</div>}
           </div>
 
           {/* Instruments */}
           <div style={{ marginBottom: "18px" }}>
-            <label className="fl">Instruments <span style={{ color: "#222", textTransform: "none", letterSpacing: 0 }}>(optional)</span></label>
+            <label className="fl">{t.instrLabel} <span style={{ color: "#222", textTransform: "none", letterSpacing: 0 }}>{t.instrOptional}</span></label>
             <input className="ifield" type="text"
-              placeholder="accordion, duduk, banjo, sitar, kora..."
+              placeholder={t.instrPlaceholder}
               value={instruments} onChange={e => setInstruments(e.target.value)}
               style={{ padding: "10px 14px", fontSize: "13px" }}
             />
-            <div className="hint">1-2 instruments work best</div>
+            <div className="hint">{t.instrHint}</div>
           </div>
 
           <div style={{ borderTop: "1px solid #1a1a1a", marginBottom: "18px" }} />
@@ -708,11 +815,11 @@ export default function SunoAssistant() {
           {/* Lyrics area */}
           <div style={{ marginBottom: "12px" }}>
             <label className="fl">
-              Lyrics {lyricsReady && <span style={{ color: "#00e5a0", textTransform: "none", letterSpacing: 0 }}>— edit directly or use Fix below</span>}
+              {t.lyricsLabel} {lyricsReady && <span style={{ color: "#00e5a0", textTransform: "none", letterSpacing: 0 }}>{t.lyricsEditHint}</span>}
             </label>
             <textarea className="ifield"
               rows={lyricsReady ? 14 : 4}
-              placeholder="Lyrics will appear here — or paste your own and go to Step 2"
+              placeholder={t.lyricsPlaceholder}
               value={lyrics} onChange={e => { setLyrics(e.target.value); if (e.target.value.trim()) setLyricsReady(true); }}
               style={{ padding: "12px 14px", fontFamily: lyricsReady ? "'DM Mono', monospace" : "'DM Sans', sans-serif", fontSize: "13px", lineHeight: "1.8", resize: "vertical" }}
             />
@@ -723,12 +830,12 @@ export default function SunoAssistant() {
             <div style={{ marginBottom: "14px" }}>
               <div style={{ display: "flex", gap: "8px", alignItems: "flex-start" }}>
                 <textarea className="ifield" rows={2}
-                  placeholder='Describe the fix: "shorten lines" or "рифма на -ая"'
+                  placeholder={t.fixPlaceholder}
                   value={fixRequest} onChange={e => setFixRequest(e.target.value)}
                   style={{ padding: "10px 12px", fontSize: "13px", resize: "none", lineHeight: "1.5", flex: 1 }}
                 />
                 <button className="btn-outline" onClick={fixLyrics} disabled={fixing || !fixRequest.trim()}>
-                  {fixing ? <span className="pulse" /> : "FIX →"}
+                  {fixing ? <span className="pulse" /> : t.fixBtn}
                 </button>
               </div>
             </div>
@@ -738,8 +845,8 @@ export default function SunoAssistant() {
 
           <button className="btn-green" onClick={generateLyrics} disabled={generatingLyrics}>
             {generatingLyrics
-              ? <span style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "8px" }}><span className="pulse" /> GENERATING LYRICS...</span>
-              : lyricsReady ? "REGENERATE LYRICS" : "GENERATE LYRICS →"}
+              ? <span style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "8px" }}><span className="pulse" /> {t.genLyricsLoading}</span>
+              : lyricsReady ? t.regenLyricsBtn : t.genLyricsBtn}
           </button>
         </div>
 
@@ -747,7 +854,7 @@ export default function SunoAssistant() {
         <div className="card" style={{ opacity: lyrics.trim() ? 1 : 0.35, transition: "opacity 0.3s" }}>
           <div className="step-row">
             <div className={`snum ${styleReady ? "done" : lyrics.trim() ? "" : "dim"}`}>{styleReady ? "✓" : "2"}</div>
-            <div className="stitle">Generate Suno style string</div>
+            <div className="stitle">{t.step2title}</div>
           </div>
 
           {settingsSummary && (
@@ -764,7 +871,7 @@ export default function SunoAssistant() {
                 <span style={{ fontSize: "14px", color: "#444" }}> / {DAILY_LIMIT}</span>
               </div>
               <div style={{ fontSize: "9px", fontFamily: "'DM Mono', monospace", color: "#444", marginTop: "3px", letterSpacing: "0.1em" }}>
-                {remaining > 0 ? "GENERATIONS LEFT TODAY" : "RESETS TOMORROW"}
+                {remaining > 0 ? t.leftToday : t.resetsTomorrow}
               </div>
             </div>
             <div style={{ display: "flex", gap: "4px" }}>
@@ -778,8 +885,8 @@ export default function SunoAssistant() {
 
           <button className="btn-green" onClick={generateStyle} disabled={generatingStyle || !lyrics.trim() || remaining <= 0}>
             {generatingStyle
-              ? <span style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "8px" }}><span className="pulse" /> GENERATING STYLE...</span>
-              : "GENERATE STYLE STRING →"}
+              ? <span style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "8px" }}><span className="pulse" /> {t.genStyleLoading}</span>
+              : t.genStyleBtn}
           </button>
         </div>
 
@@ -787,7 +894,7 @@ export default function SunoAssistant() {
         {styleReady && (
           <div style={{ marginTop: "20px", background: "#0c0c0c", border: "1px solid #00e5a0", borderRadius: "16px", padding: "20px" }}>
             <div style={{ fontFamily: "'DM Mono', monospace", fontSize: "10px", letterSpacing: "0.2em", color: "#00e5a0", marginBottom: "14px" }}>
-              ✦ READY TO PASTE INTO SUNO
+              {t.readyLabel}
             </div>
 
             {title && (
@@ -797,12 +904,12 @@ export default function SunoAssistant() {
             )}
 
             <div style={{ marginBottom: "16px" }}>
-              <label className="fl">Lyrics</label>
+              <label className="fl">{t.lyricsResultLabel}</label>
               <div style={{ background: "#080808", border: "1px solid #1e1e1e", borderRadius: "10px", padding: "14px", fontFamily: "'DM Mono', monospace", fontSize: "12px", lineHeight: "1.8", color: "#c8c8c0", whiteSpace: "pre-wrap", wordBreak: "break-word" }}>
                 {lyrics}
               </div>
               <div style={{ marginTop: "8px", display: "flex", justifyContent: "flex-end" }}>
-                <CopyBtn text={lyrics} label="COPY LYRICS" id="lyr" />
+                <CopyBtn text={lyrics} label={t.copyLyrics} id="lyr" />
               </div>
             </div>
 
@@ -814,30 +921,30 @@ export default function SunoAssistant() {
                 {styleString}
               </div>
               <div style={{ marginTop: "8px", display: "flex", justifyContent: "flex-end" }}>
-                <CopyBtn text={styleString} label="COPY STYLE" id="sty" />
+                <CopyBtn text={styleString} label={t.copyStyle} id="sty" />
               </div>
             </div>
 
             {/* Update buttons */}
             <div style={{ borderTop: "1px solid #1a1a1a", paddingTop: "16px" }}>
               <div style={{ fontSize: "10px", fontFamily: "'DM Mono', monospace", color: "#444", letterSpacing: "0.12em", marginBottom: "10px" }}>
-                CHANGED SOMETHING? UPDATE:
+                {t.updateHint}
               </div>
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px" }}>
                 <button onClick={updateVocal} disabled={updatingVocal || voices.length === 0}
                   style={{ padding: "12px 8px", background: "transparent", border: "1px solid #1e1e1e", borderRadius: "8px", color: voices.length === 0 ? "#333" : "#666", fontSize: "11px", fontFamily: "'DM Mono', monospace", cursor: voices.length === 0 ? "not-allowed" : "pointer", transition: "all 0.2s", opacity: voices.length === 0 ? 0.4 : 1 }}>
-                  {updatingVocal ? <span className="pulse" /> : "UPDATE VOCAL"}
+                  {updatingVocal ? <span className="pulse" /> : t.updateVocal}
                 </button>
                 <button onClick={generateStyle} disabled={generatingStyle || !lyrics.trim() || remaining <= 0}
                   style={{ padding: "12px 8px", background: "transparent", border: "1px solid #1e1e1e", borderRadius: "8px", color: "#666", fontSize: "11px", fontFamily: "'DM Mono', monospace", cursor: "pointer", transition: "all 0.2s" }}>
-                  {generatingStyle ? <span className="pulse" /> : "UPDATE STYLE"}
+                  {generatingStyle ? <span className="pulse" /> : t.updateStyle}
                 </button>
               </div>
             </div>
           </div>
         )}
 
-        {/* NEW SONG button — always visible at bottom */}
+        {/* NEW SONG button */}
         <div style={{ marginTop: "32px", textAlign: "center" }}>
           <button onClick={resetAll} style={{
             background: styleReady ? "#001a12" : "transparent",
@@ -855,8 +962,35 @@ export default function SunoAssistant() {
             onMouseEnter={e => { e.currentTarget.style.borderColor = "#00e5a0"; e.currentTarget.style.color = "#00e5a0"; e.currentTarget.style.background = "#001a12"; }}
             onMouseLeave={e => { e.currentTarget.style.borderColor = styleReady ? "#00e5a0" : "#2a2a2a"; e.currentTarget.style.color = styleReady ? "#00e5a0" : "#333"; e.currentTarget.style.background = styleReady ? "#001a12" : "transparent"; }}
           >
-            ↺ START NEW SONG
+            {t.newSong}
           </button>
+        </div>
+
+        {/* Feedback block */}
+        <div style={{ marginTop: "32px", borderTop: "1px solid #141414", paddingTop: "24px", textAlign: "center" }}>
+          <div style={{ fontSize: "10px", fontFamily: "'DM Mono', monospace", color: "#2a2a2a", letterSpacing: "0.15em", marginBottom: "10px" }}>
+            {t.feedbackTitle}
+          </div>
+          <p style={{ fontSize: "12px", color: "#333", lineHeight: "1.7", marginBottom: "14px" }}>
+            {t.feedbackText}<br />{t.feedbackText2}
+          </p>
+          <a href="mailto:ashu3sdv@gmail.com" style={{
+            display: "inline-block",
+            fontFamily: "'DM Mono', monospace",
+            fontSize: "11px",
+            color: "#00e5a0",
+            border: "1px solid #00e5a030",
+            borderRadius: "8px",
+            padding: "10px 20px",
+            textDecoration: "none",
+            letterSpacing: "0.08em",
+            transition: "all 0.2s",
+          }}
+            onMouseEnter={e => { e.currentTarget.style.borderColor = "#00e5a0"; e.currentTarget.style.background = "#001a12"; }}
+            onMouseLeave={e => { e.currentTarget.style.borderColor = "#00e5a030"; e.currentTarget.style.background = "transparent"; }}
+          >
+            ✉ ashu3sdv@gmail.com
+          </a>
         </div>
 
         <div style={{ marginTop: "24px", textAlign: "center", fontSize: "10px", fontFamily: "'DM Mono', monospace", color: "#1e1e1e", letterSpacing: "0.1em" }}>
