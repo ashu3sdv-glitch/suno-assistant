@@ -525,7 +525,7 @@ export default function SunoAssistant() {
       instruments ? `Key instruments: ${instruments}` : "",
     ].filter(Boolean).join("\n");
     try {
-      const response = await fetch("/api/claude", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ model: "claude-sonnet-4-20250514", max_tokens: 1500, system: lyricsPrompt, messages: [{ role: "user", content: params }] }) });
+      const response = await fetch("/api/claude", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ model: "claude-sonnet-4-6", max_tokens: 1500, system: lyricsPrompt, messages: [{ role: "user", content: params }] }) });
       const data = await response.json();
       if (data.error) throw new Error("API: " + data.error.message);
       const text = data.content?.map(i => i.text || "").join("") || "";
@@ -543,7 +543,7 @@ export default function SunoAssistant() {
     if (!fixRequest.trim()) return;
     setFixing(true);
     try {
-      const response = await fetch("/api/claude", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ model: "claude-sonnet-4-20250514", max_tokens: 1200, system: fixPrompt, messages: [{ role: "user", content: `Lyrics:\n${lyrics}\n\nFix: ${fixRequest}` }] }) });
+      const response = await fetch("/api/claude", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ model: "claude-sonnet-4-6", max_tokens: 1200, system: fixPrompt, messages: [{ role: "user", content: `Lyrics:\n${lyrics}\n\nFix: ${fixRequest}` }] }) });
       const data = await response.json();
       const fixed = data.content?.map(i => i.text || "").join("").trim();
       if (fixed) { setLyrics(fixed); setFixRequest(""); }
@@ -563,7 +563,7 @@ export default function SunoAssistant() {
         instruments ? `Instruments: ${instruments}` : "",
         `Language: ${lang === "RU" ? "Russian" : "English"} (do NOT include this in style string)`,
       ].filter(Boolean).join("\n");
-      const response = await fetch("/api/claude", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ model: "claude-sonnet-4-20250514", max_tokens: 300, system: stylePrompt, messages: [{ role: "user", content: params }] }) });
+      const response = await fetch("/api/claude", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ model: "claude-sonnet-4-6", max_tokens: 300, system: stylePrompt, messages: [{ role: "user", content: params }] }) });
       const data = await response.json();
       const text = data.content?.map(i => i.text || "").join("") || "";
       const parsed = JSON.parse(text.replace(/```json|```/g, "").trim());
@@ -576,7 +576,7 @@ export default function SunoAssistant() {
     if (voices.length === 0) return;
     setUpdatingVocal(true);
     try {
-      const response = await fetch("/api/claude", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ model: "claude-sonnet-4-20250514", max_tokens: 100, system: vocalPrompt, messages: [{ role: "user", content: `Voice: ${voices.join(", ")}` }] }) });
+      const response = await fetch("/api/claude", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ model: "claude-sonnet-4-6", max_tokens: 100, system: vocalPrompt, messages: [{ role: "user", content: `Voice: ${voices.join(", ")}` }] }) });
       const data = await response.json();
       const newVocalLine = data.content?.map(i => i.text || "").join("").trim();
       if (newVocalLine) { const lines = lyrics.split("\n"); lines[0] = newVocalLine; setLyrics(lines.join("\n")); }
@@ -620,14 +620,10 @@ export default function SunoAssistant() {
         .pill { background: #0f0f0f; border: 1px solid #1e1e1e; border-radius: 8px; color: #888; padding: 8px 4px; font-size: 11px; cursor: pointer; transition: all 0.15s; font-family: 'DM Sans', sans-serif; text-align: center; user-select: none; line-height: 1.3; word-break: break-word; }
         .pill:hover { border-color: #333; color: #ccc; }
         .pill.active { border-color: #00e5a0; color: #00e5a0; background: #001a12; }
-
-        /* Mobile-first grids — 2 columns on small screens */
         .g4 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; }
         .g5 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; }
         .g3 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; }
         .g4-voice { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; }
-
-        /* Expand to full columns on wider screens */
         @media (min-width: 440px) {
           .g4 { grid-template-columns: repeat(4, 1fr); gap: 7px; }
           .g5 { grid-template-columns: repeat(5, 1fr); gap: 7px; }
@@ -635,7 +631,6 @@ export default function SunoAssistant() {
           .g4-voice { grid-template-columns: repeat(4, 1fr); gap: 7px; }
           .pill { font-size: 12px; padding: 8px 6px; }
         }
-
         .btn-green { width: 100%; padding: 16px; background: #00e5a0; border: none; border-radius: 12px; color: #000; font-size: 14px; font-weight: 500; font-family: 'DM Mono', monospace; letter-spacing: 0.08em; cursor: pointer; transition: all 0.2s; }
         .btn-green:hover { background: #00ffb3; transform: translateY(-1px); }
         .btn-green:disabled { background: #1a1a1a; color: #444; cursor: not-allowed; transform: none; }
@@ -656,11 +651,7 @@ export default function SunoAssistant() {
         .pulse { display: inline-block; width: 7px; height: 7px; background: #00e5a0; border-radius: 50%; animation: p 1s infinite; }
         @keyframes p { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.4;transform:scale(0.7)} }
         .noise-bg { position: fixed; top:0; left:0; right:0; bottom:0; opacity: 0.025; pointer-events: none; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); background-size: 200px; z-index: 0; }
-
-        /* Counter row — don't overflow on mobile */
         .counter-row { display: flex; align-items: center; gap: 5px; flex-shrink: 0; }
-
-        /* Update buttons — 1 col on mobile, 3 on wider */
         .update-grid { display: grid; grid-template-columns: 1fr; gap: 8px; }
         @media (min-width: 360px) { .update-grid { grid-template-columns: repeat(3, 1fr); } }
       `}</style>
@@ -668,7 +659,6 @@ export default function SunoAssistant() {
       <div className="noise-bg" />
       <div style={{ position: "relative", zIndex: 1, maxWidth: "500px", margin: "0 auto", padding: "28px 14px 60px" }}>
 
-        {/* Header */}
         <div style={{ marginBottom: "28px" }}>
           <div style={{ fontFamily: "'DM Mono', monospace", fontSize: "10px", letterSpacing: "0.2em", color: "#00e5a0", marginBottom: "10px", textTransform: "uppercase" }}>
             AI Music Lab ✦ Suno Assistant
@@ -681,14 +671,12 @@ export default function SunoAssistant() {
           </p>
         </div>
 
-        {/* ── STEP 1 ── */}
         <div className="card" style={{ marginBottom: "16px" }}>
           <div className="step-row">
             <div className={`snum ${lyricsReady ? "done" : ""}`}>{lyricsReady ? "✓" : "1"}</div>
             <div className="stitle">{t.step1title}</div>
           </div>
 
-          {/* Theme */}
           <div style={{ marginBottom: "16px" }}>
             <label className="fl">{t.themeLabel}</label>
             <textarea className="ifield" rows={3}
@@ -698,7 +686,6 @@ export default function SunoAssistant() {
             />
           </div>
 
-          {/* Language */}
           <div style={{ marginBottom: "16px" }}>
             <label className="fl">{t.langLabel}</label>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px" }}>
@@ -711,7 +698,6 @@ export default function SunoAssistant() {
             </div>
           </div>
 
-          {/* Genre */}
           <div style={{ marginBottom: "16px" }}>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "6px" }}>
               <label className="fl" style={{ marginBottom: 0 }}>{t.genreLabel} <span style={{ color: "#222", textTransform: "none", letterSpacing: 0 }}>{t.genreMax}</span></label>
@@ -757,7 +743,6 @@ export default function SunoAssistant() {
             {genres.length === 3 && <div style={{ fontSize: "11px", fontFamily: "'DM Mono', monospace", marginTop: "8px", color: "#00e5a0" }}>{t.genreMaxMsg}</div>}
           </div>
 
-          {/* Mood */}
           <div style={{ marginBottom: "16px" }}>
             <label className="fl">{t.moodLabel} <span style={{ color: "#222", textTransform: "none", letterSpacing: 0 }}>{t.moodOptional}</span></label>
             <div className="g5">
@@ -768,7 +753,6 @@ export default function SunoAssistant() {
             </div>
           </div>
 
-          {/* Voice */}
           <div style={{ marginBottom: "16px" }}>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "6px" }}>
               <label className="fl" style={{ marginBottom: 0 }}>{t.voiceLabel} <span style={{ color: "#222", textTransform: "none", letterSpacing: 0 }}>{t.voiceMax}</span></label>
@@ -799,7 +783,6 @@ export default function SunoAssistant() {
             {voices.length === 2 && <div style={{ fontSize: "11px", fontFamily: "'DM Mono', monospace", marginTop: "8px", color: "#00e5a0" }}>{t.voiceMaxMsg}</div>}
           </div>
 
-          {/* Instruments */}
           <div style={{ marginBottom: "18px" }}>
             <label className="fl">{t.instrLabel} <span style={{ color: "#222", textTransform: "none", letterSpacing: 0 }}>{t.instrOptional}</span></label>
             <input className="ifield" type="text"
@@ -812,7 +795,6 @@ export default function SunoAssistant() {
 
           <div style={{ borderTop: "1px solid #1a1a1a", marginBottom: "18px" }} />
 
-          {/* Lyrics area */}
           <div style={{ marginBottom: "12px" }}>
             <label className="fl">
               {t.lyricsLabel} {lyricsReady && <span style={{ color: "#00e5a0", textTransform: "none", letterSpacing: 0 }}>{t.lyricsEditHint}</span>}
@@ -825,7 +807,6 @@ export default function SunoAssistant() {
             />
           </div>
 
-          {/* Fix row */}
           {(lyricsReady || lyrics.trim()) && (
             <div style={{ marginBottom: "14px" }}>
               <div style={{ display: "flex", gap: "8px", alignItems: "flex-start" }}>
@@ -850,7 +831,6 @@ export default function SunoAssistant() {
           </button>
         </div>
 
-        {/* ── STEP 2 ── */}
         <div className="card" style={{ opacity: lyrics.trim() ? 1 : 0.35, transition: "opacity 0.3s" }}>
           <div className="step-row">
             <div className={`snum ${styleReady ? "done" : lyrics.trim() ? "" : "dim"}`}>{styleReady ? "✓" : "2"}</div>
@@ -863,7 +843,6 @@ export default function SunoAssistant() {
             </div>
           )}
 
-          {/* Counter */}
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", background: "#080808", border: "1px solid #1a1a1a", borderRadius: "10px", padding: "12px 14px", marginBottom: "14px" }}>
             <div>
               <div style={{ fontFamily: "'DM Mono', monospace", lineHeight: 1 }}>
@@ -890,7 +869,6 @@ export default function SunoAssistant() {
           </button>
         </div>
 
-        {/* ── RESULT ── */}
         {styleReady && (
           <div style={{ marginTop: "20px", background: "#0c0c0c", border: "1px solid #00e5a0", borderRadius: "16px", padding: "20px" }}>
             <div style={{ fontFamily: "'DM Mono', monospace", fontSize: "10px", letterSpacing: "0.2em", color: "#00e5a0", marginBottom: "14px" }}>
@@ -925,7 +903,6 @@ export default function SunoAssistant() {
               </div>
             </div>
 
-            {/* Update buttons */}
             <div style={{ borderTop: "1px solid #1a1a1a", paddingTop: "16px" }}>
               <div style={{ fontSize: "10px", fontFamily: "'DM Mono', monospace", color: "#444", letterSpacing: "0.12em", marginBottom: "10px" }}>
                 {t.updateHint}
@@ -944,7 +921,6 @@ export default function SunoAssistant() {
           </div>
         )}
 
-        {/* NEW SONG button */}
         <div style={{ marginTop: "32px", textAlign: "center" }}>
           <button onClick={resetAll} style={{
             background: styleReady ? "#001a12" : "transparent",
@@ -966,7 +942,6 @@ export default function SunoAssistant() {
           </button>
         </div>
 
-        {/* Feedback block */}
         <div style={{ marginTop: "32px", borderTop: "1px solid #141414", paddingTop: "24px", textAlign: "center" }}>
           <div style={{ fontSize: "10px", fontFamily: "'DM Mono', monospace", color: "#2a2a2a", letterSpacing: "0.15em", marginBottom: "10px" }}>
             {t.feedbackTitle}
