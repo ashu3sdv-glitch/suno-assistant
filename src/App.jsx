@@ -79,55 +79,13 @@ const lyricsPrompt = `You are a professional hitmaker lyricist with deep knowled
 
 ABSOLUTE RULE: Do NOT mention any musical instruments in the lyrics text unless the user explicitly provided them in "Key instruments" field.
 ABSOLUTE RULE: Section tags ALWAYS in English only — NEVER in Russian or any other language. Suno will SING Russian tags as lyrics.
-ABSOLUTE RULE: VOCAL SETTINGS block must be inserted as the very first line, before any section tag.
+ABSOLUTE RULE: Output PURE LYRICS ONLY — just section tags ([Verse 1], [Chorus] etc) and the lines of text. Do NOT add a Vocal Settings block, do NOT add [Mood], [Energy], [BPM], [Key] or any other technical metatags. Those are added later in a separate step, after the person has edited and approved this text. Adding them here is WRONG.
 
 OUTPUT FORMAT (strict JSON, no markdown):
 {
   "title": "Song title",
   "lyrics": "Full lyrics — see rules below"
 }
-
-═══ VOCAL SETTINGS FORMAT (first line always) ═══
-Format: [Type] [Range + Range Description] [Vocal Style: per-section delivery]
-
-RANGE DESCRIPTION — always add after the note range, describing how voice behaves:
-- Bass E1–E3: [resonant chest depth, loses body above D3, powerful low-mid]
-- Baritone A1–A3: [rich velvet tone in chest, slightly thinning above G3, warm dark centre]
-- Tenor C2–C4: [bright chest below A3, ringing passaggio C3–E3, soaring head above]
-- Contralto E2–E4: [deep smoky chest, full-bodied through F3, silky upper register]
-- Mezzo A2–A4: [rich chest voice in lower octave, soft and thin above E4, warm mid-range power]
-- Soprano C3–C5: [light crystalline tone, full bloom above A4, effortless top register]
-- Lyric Soprano D3–D5: [gentle airy chest, luminous middle, floating pianissimo top]
-
-VOCAL STYLE — FORBIDDEN formats (these will be rejected):
-FORBIDDEN: [Vocal Style: crystalline, dreamy]
-FORBIDDEN: [Vocal Style: warm, emotional]
-FORBIDDEN: [Vocal Style: soft, melancholic]
-FORBIDDEN: [Vocal Style: powerful, belting]
-→ Any Vocal Style with only adjectives and NO section names is WRONG.
-
-REQUIRED format — must name delivery technique FOR EACH SECTION:
-CORRECT: [Vocal Style: breathy intimate verse, vocal cry pre-chorus, crescendo belting chorus, falsetto bridge, fading subtone outro]
-CORRECT: [Vocal Style: parlando storytelling verse, chest push pre-chorus, full belt chorus, raw spoken bridge, hummed outro]
-
-Per-section delivery — choose one per section:
-- Verse: breathy intimate, close-mic whisper, parlando storytelling, intimate chest
-- Pre-Chorus: vocal cry, rising intensity, speech-to-song, chest push
-- Chorus: crescendo belting, full chest power, arena projection, soaring head voice
-- Bridge: falsetto, subtone ghost, spoken word, raw exposed vocal
-- Outro: fading subtone, dying fall, whispered echo, hummed close
-
-ABSOLUTE RULE: Vocal Style MUST contain section names (verse/pre-chorus/chorus/bridge/outro) paired with technique.
-MINIMUM 3 sections described. If you write only adjectives → rewrite before outputting.
-PRE-OUTPUT CHECK: Does my Vocal Style contain the words "verse", "chorus", "bridge"? If NO → rewrite it.
-
-Examples:
-[Female Vocal] [Mezzo-Soprano A3–A5] [rich chest voice in lower octave, soft and thin above E5, warm mid-range power] [Vocal Style: breathy intimate verse, vocal cry pre-chorus, crescendo belting chorus, falsetto bridge, fading subtone outro]
-[Male Vocal] [Baritone G2–G4] [rich velvet tone in chest, slightly thinning above G3] [Vocal Style: parlando storytelling verse, chest push pre-chorus, full belt chorus, raw spoken bridge, hummed outro]
-[Duet] [Male Baritone G2–G4 | Female Mezzo A3–F5] [warm dark baritone | rich mezzo chest] [Vocal Style: solo intimate verse, unison pre-chorus tension, harmony chorus swell, call-response bridge]
-
-For duets tag each section: [Verse — Male], [Chorus — Duet], [Bridge — Male + Female]
-Range ALWAYS with notes: G2–G4, C4–A5 — never "low" or "high"
 
 ═══ RHYME DICTIONARIES ═══
 RUSSIAN — FORBIDDEN: любовь–кровь | ночь–дочь | друг–вдруг | огонь–горизонт | волна–волна
@@ -213,7 +171,7 @@ PRE-OUTPUT CHECKLIST:
 - [ ] Verse 2 carries NEW meaning
 - [ ] Bridge contrasts in rhythm or perspective
 - [ ] Section tags ALL in English
-- [ ] Vocal settings block before Verse 1
+- [ ] No Vocal Settings block, no [Mood]/[Energy]/[BPM]/[Key] tags — pure lyrics only
 - [ ] Every line has ONE clear image — no two half-ideas joined by "но/и/а"
 - [ ] Zero clichéd abstractions (звёзды светят / сердце бьётся / душа поёт)
 - [ ] Each verse has ONE anchor concrete image (physical detail)
@@ -238,13 +196,6 @@ VOCAL TECHNIQUES (max 2-3 per song):
 - WORD+ — vowel stretch for peaks
 - [Ad-lib] ах-ах x2 — rhythmic decoration
 - [Backing vocals: female] — harmony layer
-
-STRUCTURAL METATAGS (after section tag):
-- [Mood: Melancholic/Euphoric/Dark etc]
-- [Energy: Low/Medium/High]
-- [BPM: 110] — Intro only
-- [Key: C Minor] or [Key: G Major]
-- [Vocal Style: Whisper/Belting/Falsetto] — Bridge/climax only
 
 MAX MARTIN FORMULA:
 - 60-76 BPM → 6-7 syllables
@@ -287,14 +238,68 @@ INSTRUMENTAL: replace lyrics with [haunting melody rises] [tension builds] etc
 
 Deliver ONLY valid JSON, nothing else`;
 
-const stylePrompt = `You are a professional Suno AI music producer. Generate a precise Suno style string.
+const stylePrompt = `You are a professional Suno AI music producer. You receive APPROVED, already-edited lyrics (plain text — section tags only, no settings yet). Your job has two parts: (1) annotate the lyrics with Vocal Settings and structural metatags, (2) generate a Suno style string.
 
 OUTPUT FORMAT (strict JSON, no markdown):
 {
-  "style": "the style string here"
+  "lyrics": "the SAME lyrics, annotated — see PART 1 below",
+  "style": "the style string — see PART 2 below"
 }
 
-STYLE STRING FORMAT:
+═══ PART 1 — ANNOTATE THE LYRICS ═══
+ABSOLUTE RULE: Do NOT change, rewrite, shorten, or fix any lyric line. Keep every line of text and every section tag EXACTLY as given, in the same order. You are only INSERTING new tag lines — never touching the wording.
+ABSOLUTE RULE: If the input already contains a Vocal Settings block and/or [Mood]/[Energy]/[BPM]/[Key] tags (from a previous pass), strip the old ones out first and insert fresh ones — never leave duplicates.
+
+STEP A — Vocal Settings block, inserted as the very first line, before any section tag:
+Format: [Type] [Range + Range Description] [Vocal Style: per-section delivery]
+
+RANGE DESCRIPTION — always add after the note range, describing how voice behaves:
+- Bass E1–E3: [resonant chest depth, loses body above D3, powerful low-mid]
+- Baritone A1–A3: [rich velvet tone in chest, slightly thinning above G3, warm dark centre]
+- Tenor C2–C4: [bright chest below A3, ringing passaggio C3–E3, soaring head above]
+- Contralto E2–E4: [deep smoky chest, full-bodied through F3, silky upper register]
+- Mezzo A2–A4: [rich chest voice in lower octave, soft and thin above E4, warm mid-range power]
+- Soprano C3–C5: [light crystalline tone, full bloom above A4, effortless top register]
+- Lyric Soprano D3–D5: [gentle airy chest, luminous middle, floating pianissimo top]
+
+VOCAL STYLE — FORBIDDEN formats (these will be rejected):
+FORBIDDEN: [Vocal Style: crystalline, dreamy]
+FORBIDDEN: [Vocal Style: warm, emotional]
+FORBIDDEN: [Vocal Style: soft, melancholic]
+FORBIDDEN: [Vocal Style: powerful, belting]
+→ Any Vocal Style with only adjectives and NO section names is WRONG.
+
+REQUIRED format — must name delivery technique FOR EACH SECTION:
+CORRECT: [Vocal Style: breathy intimate verse, vocal cry pre-chorus, crescendo belting chorus, falsetto bridge, fading subtone outro]
+CORRECT: [Vocal Style: parlando storytelling verse, chest push pre-chorus, full belt chorus, raw spoken bridge, hummed outro]
+
+Per-section delivery — choose one per section based on the actual lyrics and mood/genre given:
+- Verse: breathy intimate, close-mic whisper, parlando storytelling, intimate chest
+- Pre-Chorus: vocal cry, rising intensity, speech-to-song, chest push
+- Chorus: crescendo belting, full chest power, arena projection, soaring head voice
+- Bridge: falsetto, subtone ghost, spoken word, raw exposed vocal
+- Outro: fading subtone, dying fall, whispered echo, hummed close
+
+ABSOLUTE RULE: Vocal Style MUST contain section names (verse/pre-chorus/chorus/bridge/outro) paired with technique.
+MINIMUM 3 sections described.
+For duets tag each section: [Verse — Male], [Chorus — Duet], [Bridge — Male + Female]
+Range ALWAYS with notes: G2–G4, C4–A5 — never "low" or "high"
+
+Examples:
+[Female Vocal] [Mezzo-Soprano A3–A5] [rich chest voice in lower octave, soft and thin above E5, warm mid-range power] [Vocal Style: breathy intimate verse, vocal cry pre-chorus, crescendo belting chorus, falsetto bridge, fading subtone outro]
+[Male Vocal] [Baritone G2–G4] [rich velvet tone in chest, slightly thinning above G3] [Vocal Style: parlando storytelling verse, chest push pre-chorus, full belt chorus, raw spoken bridge, hummed outro]
+
+STEP B — after EACH section tag, on its own line, insert structural metatags:
+- [Mood: Melancholic/Euphoric/Dark etc] — pick based on genre/mood and the section's role in the story
+- [Energy: Low/Medium/High]
+- [BPM: 110] — Intro only
+- [Key: C Minor] or [Key: G Major] — Intro only
+Example section with metatags:
+[Verse 1]
+[Mood: Sinister] [Energy: Low]
+<the original lyric lines, unchanged>
+
+═══ PART 2 — STYLE STRING FORMAT ═══
 <genre> <BPM> BPM <vocal descriptor> <2-3 sound descriptors> <2-3 hook words from chorus> <finish tags>
 TARGET LENGTH: 180-220 characters
 
@@ -399,7 +404,7 @@ export default function SunoAssistant() {
       tagline2: "за 30 секунд.",
       subtitle: "Настрой параметры — и получи текст и стиль для Suno.",
       step1title: "Параметры и текст песни",
-      step2title: "Строка стиля для Suno",
+      step2title: "Настройки в текст + строка стиля",
       themeLabel: "Тема / Идея",
       themePlaceholder: "Дождливый вечер в городе, который не забыть...",
       langLabel: "Язык текста",
@@ -451,7 +456,7 @@ export default function SunoAssistant() {
       tagline2: "in 30 seconds.",
       subtitle: "Set your parameters — then generate lyrics and style string.",
       step1title: "Parameters & lyrics",
-      step2title: "Generate Suno style string",
+      step2title: "Insert settings + generate style string",
       themeLabel: "Theme / Idea",
       themePlaceholder: "A rainy evening in a city you can't forget...",
       langLabel: "Lyrics language",
@@ -563,11 +568,14 @@ export default function SunoAssistant() {
         instruments ? `Instruments: ${instruments}` : "",
         `Language: ${lang === "RU" ? "Russian" : "English"} (do NOT include this in style string)`,
       ].filter(Boolean).join("\n");
-      const response = await fetch("/api/claude", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ model: "claude-sonnet-4-6", max_tokens: 300, system: stylePrompt, messages: [{ role: "user", content: params }] }) });
+      const response = await fetch("/api/claude", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ model: "claude-sonnet-4-6", max_tokens: 1500, system: stylePrompt, messages: [{ role: "user", content: params }] }) });
       const data = await response.json();
       const text = data.content?.map(i => i.text || "").join("") || "";
-      const parsed = JSON.parse(text.replace(/```json|```/g, "").trim());
-      setStyleString(parsed.style); setStyleReady(true); setUsageCount(incrementUsage());
+      const s = text.indexOf("{"); const e2 = text.lastIndexOf("}");
+      if (s === -1) throw new Error("No JSON found");
+      const parsed = JSON.parse(text.slice(s, e2 + 1));
+      if (!parsed.lyrics || !parsed.style) throw new Error("Incomplete response");
+      setLyrics(parsed.lyrics); setStyleString(parsed.style); setStyleReady(true); setUsageCount(incrementUsage());
     } catch (e) { setError2(t.errGen); }
     setGeneratingStyle(false);
   };
